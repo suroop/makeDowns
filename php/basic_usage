@@ -1,0 +1,1713 @@
+
+
+# Basic usage
+
+## php简介
+
+### php是什么
+
++ 一种通用开源脚本语言
++ PHP 脚本在服务器上执行
++ 语法上与C++有许多相似之处
+
+### php文件
+
++ PHP 文件可包含文本、HTML、JavaScript代码和 PHP 代码
++ PHP 代码在服务器上执行，结果以纯 HTML 形式返回给浏览器
+
++ PHP 文件的默认文件扩展名是 ".php"
+
+### php能做什么
+
+- PHP 可以生成动态页面内容
+- PHP 可以创建、打开、读取、写入、关闭服务器上的文件
+- PHP 可以收集表单数据
+- PHP 可以发送和接收 cookies
+- PHP 可以添加、删除、修改您的数据库中的数据
+- PHP 可以限制用户访问您的网站上的一些页面
+- PHP 可以加密数据
+
+## php基本语法
+
++ PHP 脚本可以放在文档中的任何位置
++ PHP 脚本以 ** 开始，以 **?>** 结束
+
+```php
+<?php
+	//php代码
+    /*C++风格注释*/
+?>
+```
+
+##  php变量
+
+- 变量以 $ 符号开始，后面跟着变量的名称
+- 变量名必须以字母或者下划线字符开始
+- 变量名只能包含字母数字字符以及下划线（A-z、0-9 和 _ ）
+- 变量名不能包含空格
+- 变量名是区分大小写的（$y 和 $Y 是两个不同的变量）
+
+### 创建php变量
+
+```php
+<?php
+    $x=8;
+	$text="hello php";
+    ?>
+```
+
+### php是一门弱语言
+
+同js一样,不必向 PHP 声明该变量的数据类型
+
+PHP 会根据变量的值，自动把变量转换为正确的数据类型。
+
+在强类型的编程语言中，我们必须在使用变量前先声明（定义）变量的类型和名称。
+
+### php作用域
+
+在所有函数外部定义的变量，拥有全局作用域.全局变量可以被脚本中的被除了函数内部的任何部分访问
+
+要在一个函数中访问一个全局变量，需要使用 `global` 关键字
+
+在 PHP 函数内部声明的变量是局部变量，仅能在函数内部访问
+
+```php
+<?php
+    $x=10;
+    function test(){
+    	$text="hello php";// 局部变量
+    	echo $text;
+    	//hello php
+	}
+	test();
+	echo $x;//10
+	echo $text;//无值
+    ?>
+```
+
+#### global 关键字
+
+```php
+<?php
+    $text1="hello";//全局变量
+    function test(){
+    	global $text1;
+        
+        $text2=" php";// 局部变量
+    	
+        echo $text1.$text2;
+  
+	}
+	test();
+	//hello php  
+?>
+```
+
+#### Static 作用域
+
+用法同C的static关键字相同
+
+```php
+<?php
+    function test(){
+    	static $x=0;
+    	$x++;
+    	echo $x;
+	}
+	test();//1
+	test();//2
+	test();//3
+    ?>
+```
+
+#### 参数作用域
+
+参数是通过调用代码将值传递给函数的局部变量。
+
+参数是在参数列表中声明的，作为函数声明的一部分
+
+## echo和print
+
+在 PHP 中有两个基本的输出方式： echo 和 print。
+
+### echo 和 print 区别
+
+- echo - 可以输出一个或多个字符串
+- print - 只允许输出一个字符串，返回值总为 1
+- echo 输出的速度比 print 快， echo 没有返回值，print有返回值1
+
+### echo和print相同点
+
++ 字符串可以包含 HTML 标签
++ 使用的时候可以不用加括号，也可以加上括号
+
+### echo语句
+
+```php
+<?php
+	//显示字符串
+	echo "hello php";
+	echo "hello <b>php</b>"
+	echo "hello ","php"
+	//显示变量
+	$text="hello php";
+	$x=45;
+	echo $text;
+	echo $x;
+	echo "<br>"
+?>
+```
+
+### print语句
+
+```php
+<?php
+	//显示字符串
+	print "hello php";
+	print "hello <b>php</b>"
+	//显示变量
+	$text="hello php";
+	$x=45;
+	print $text;
+	print $x;
+	print "<br>"
+?>
+```
+
+## EOF
+
+### 使用
+
+1.必须后接分号，否则编译通不过。
+
+2.**EOF** 可以用任意其它字符代替，只需保证结束标识与开始标识一致。
+
+3.结束标识必须顶格独自占一行(即必须从行首开始，前后不能衔接任何空白和字符)
+
+4.开始标识可以不带引号或带单双引号，不带引号与带双引号效果一致，解释内嵌的变量和转义符号，带单引号则不解释内嵌的变量和转义符号。
+
+5.当内容需要内嵌引号（单引号或双引号）时，不需要加转义符，本身对单双引号转义，此处相当与q和qq的用法。
+
+```php
+<?php
+	echo<<<EOF
+		一段文字
+		又一段文字
+EOF;
+// 结束需要独立一行且前后不能空格
+?>
+```
+
+note:
+
++ 以 **<< 开始标记开始，以 **EOF** 结束标记结束，结束标记必须顶头写，不能有缩进和空格，且在结束标记末尾要有分号 
++ 开始标记和结束标记相同
+
+- 1.PHP 定界符 **EOF** 的作用就是按照原样，包括换行格式什么的，输出在其内部的东西；
+- 位于开始标记和结束标记之间的变量可以被正常解析，但是函数则不可以。在 heredoc 中，变量不需要用连接符 **.** 或 **,** 来拼接，
+-  2.在 PHP 定界符 **EOF** 中的任何特殊字符都不需要转义；
+-  3.PHP 定界符 __EOF__
+
+#### PHP_EOL
+
+PHP_EOL也是一种php换行符
+
+## 数据类型
+
+### 字符串
+
+可以将任何文本放在单引号和双引号中
+
+```php
+<?php 
+$text1 = "Hello world!";
+echo "<br>"; 
+$text2 = 'Hello world!';
+?>
+```
+
+### 整型
+
+整数是一个没有小数的数字
+
+- 整数必须至少有一个数字 (0-9)
+- 整数不能包含逗号或空格
+- 整数是没有小数点的
+- 整数可以是正数或负数
+- 整型可以用三种格式来指定：十进制， 十六进制（ 以 0x 为前缀）或八进制（前缀为 0）
+
+```php
+<?php 
+$x = 7;
+echo "<br>"; 
+$x = -345; // 负数 
+echo "<br>"; 
+$x = 0x8C; // 十六进制数
+echo "<br>";
+$x = 047; // 八进制数
+?>
+```
+
+
+
+### 浮点型
+
+浮点数是带小数部分的数字，或是指数形式
+
+```php
+<?php 
+    $x = 10.365;
+    echo "<br>"; 
+    $x = 2.4e3;
+    echo "<br>"; 
+    $x = 8E-5;
+?>
+```
+
+### 布尔型
+
+布尔型可以是 TRUE 或 FALSE
+
+```php
+<?php
+    $x=true;
+    $y=false;
+    ?>
+```
+
+### 数组
+
+数组可以在一个变量中存储多个值
+
+创建数组需要使用array关键字
+
+```php
+<?php
+    $num=array(5,8,4);
+    ?>
+```
+
+
+
+### 对象
+
+必须使用class关键字声明类对象。类是可以包含属性和方法的结构
+
+类中定义数据类型，然后在实例化的类中使用数据类型
+
+```php
+<?php
+    class student{
+	var $name;
+    function __construct($name="John"){
+        $this->name=$name;
+    }
+	}
+?>
+```
+
+
+
+### NULL值
+
+NULL 值表示变量没有值。NULL 是数据类型为 NULL 的值。
+
+NULL 值指明一个变量是否为空值。 同样可用于数据空值和NULL值的区别
+
+```php
+<?php
+    $x="Hello world!";
+    $x=null;
+?>
+```
+
+### var_dump()
+
+`var_dump()` 方法，判断一个变量的类型与长度，并输出变量的数值，如果变量有值，则输出是变量的值，并返回数据类型
+
+用保证 var_dump 中的变量必须是存在的，如果变量不存在则返回 NULL。该函数有输出的功能，因此不必加echo或print
+
+## 类型比较
+
+### 比较模式
+
+​	同js
+
+- 松散比较：使用两个等号 **==** 比较，只比较值，不比较类型。
+- 严格比较：用三个等号 **===** 比较，除了比较值，也比较类型。
+
+```php
+<?php
+    if(42 == "42") {
+        echo '1、值相等';
+    }
+
+    echo PHP_EOL; // 换行符
+
+    if(42 === "42") {
+        echo '2、类型相等';
+    } else {
+        echo '3、不相等';
+    }
+?>
+```
+
+### 比较0、false、null
+
+这块比较麻烦之后再讲
+
+## php常量
+
+常量在整个脚本中都可以使用
+
+(常量名不需要加 $ 修饰符)
+
+值在脚本中不能改变
+
+### 设置 PHP 常量
+
+```php
+bool define ( string $name , mixed $value [, bool $case_insensitive = false ] )
+```
+
+- **name：**必选参数，常量名称，即标志符。
+- **value：**必选参数，常量的值。
+- **case_insensitive** ：可选参数，如果设置为 TRUE，该常量则大小写不敏感。默认是大小写敏感的。
+
+```php
+<?php
+	define("god","GOOD");
+	echo god;
+	god="good";//错误
+?>
+```
+
+## 字符串变量
+
+### 字符串的连接
+
+不同于js和python
+
+php使用**并置运算符**
+
+```php
+<?php
+    $txt1="Hello";
+    $txt2="php!";
+    echo $txt1 . " " . $txt2;
+	//hello php
+?>
+```
+
+### 在字符串中使用变量
+
+```php+HTML
+<!DOCTYPE html> 
+<html> 
+<body> 
+
+    <?php 
+        $x="hello";
+    echo "{$x} World!"; 
+    ?> 
+	//hello World!
+</body> 
+</html>
+```
+
+### strlen()
+
+strlen() 函数返回字符串的长度（字节数)
+
+相当于js.length
+
+```php
+<?php
+	echo strlen("Hello php!");
+	//10
+?>
+```
+
+
+
+### strpos()
+
+strpos() 函数用于在字符串内查找一个字符或一段指定的文本
+
+相当于js.indexOf()
+
+如果在字符串中找到匹配，该函数会返回第一个匹配的字符位置(从0开始索引)。如果未找到匹配，则返回 FALSE
+
+```php
+<?php
+	echo strpos("Hello php!","php");
+	//6
+?>
+```
+
+### str_replace()
+
+```php
+<?php
+	str_replace(arg,arg,arg);
+	//被替换的,要替换的,在哪里替换
+?>
+```
+
+
+
+## 运算符
+
+### 算术运算符
+
+| x + y | 加               | x 和 y 的和     | 2 + 2               | 4     |
+| ----- | ---------------- | --------------- | ------------------- | ----- |
+| x - y | 减               | x 和 y 的差     | 5 - 2               | 3     |
+| x * y | 乘               | x 和 y 的积     | 5 * 2               | 10    |
+| x / y | 除               | x 和 y 的商     | 15 / 5              | 3     |
+| x % y | 模（除法的余数） | x 除以 y 的余数 | 5 % 2 10 % 8 10 % 2 | 1 2 0 |
+| - x   | 取反             | x 取反          | ``                  | -2    |
+| a . b | 并置             | 连接两个字符串  | "Hi" . "Ha"         | HiHa  |
+
+### 赋值运算符
+
+| x = y  | x = y     | 左操作数被设置为右侧表达式的值 |
+| ------ | --------- | ------------------------------ |
+| x += y | x = x + y | 加                             |
+| x -= y | x = x - y | 减                             |
+| x *= y | x = x * y | 乘                             |
+| x /= y | x = x / y | 除                             |
+| x %= y | x = x % y | 模（除法的余数）               |
+| a .= b | a = a . b | 连接两个字符串                 |
+
+### 递增/递减运算符
+
+| ++ x | 预递增 | x 加 1，然后返回 x  |
+| ---- | ------ | ------------------- |
+| x ++ | 后递增 | 返回 x，然后 x 加 1 |
+| -- x | 预递减 | x 减 1，然后返回 x  |
+| x -- | 后递减 | 返回 x，然后 x 减 1 |
+
+### 比较运算符
+
+较其他语言新增了一种不等于符号`<>`
+
+| x == y  | 等于       | 如果 x 等于 y，则返回 true                     | 5==8 返回 false    |
+| ------- | ---------- | ---------------------------------------------- | ------------------ |
+| x === y | 绝对等于   | 如果 x 等于 y，且它们类型相同，则返回 true     | 5==="5" 返回 false |
+| x != y  | 不等于     | 如果 x 不等于 y，则返回 true                   | 5!=8 返回 true     |
+| x <> y  | 不等于     | 如果 x 不等于 y，则返回 true                   | 5<>8 返回 true     |
+| x !== y | 绝对不等于 | 如果 x 不等于 y，或它们类型不相同，则返回 true | 5!=="5" 返回 true  |
+| x > y   | 大于       | 如果 x 大于 y，则返回 true                     | 5>8 返回 false     |
+| x < y   | 小于       | 如果 x 小于 y，则返回 true                     | 5<8 返回 true      |
+| x >= y  | 大于等于   | 如果 x 大于或者等于 y，则返回 true             | 5>=8 返回 false    |
+| x <= y  | 小于等于   | 如果 x 小于或者等于 y，则返回 true             | 5<=8 返回 true     |
+
+### 逻辑运算符
+
+兼容了C与python的逻辑运算符
+
+| x and y  | 与   | 如果 x 和 y 都为 true，则返回 true           | x=6 y=3 (x < 10 and y > 1) 返回 true |
+| -------- | ---- | -------------------------------------------- | ------------------------------------ |
+| x or y   | 或   | 如果 x 和 y 至少有一个为 true，则返回 true   | x=6 y=3 (x==6 or y==5) 返回 true     |
+| x xor y  | 异或 | 如果 x 和 y 有且仅有一个为 true，则返回 true | x=6 y=3 (x==6 xor y==3) 返回 false   |
+| x && y   | 与   | 如果 x 和 y 都为 true，则返回 true           | x=6 y=3 (x < 10 && y > 1) 返回 true  |
+| x \|\| y | 或   | 如果 x 和 y 至少有一个为 true，则返回 true   | x=6 y=3 (x==5 \|\| y==5) 返回 false  |
+| ! x      | 非   | 如果 x 不为 true，则返回 true                | x=6 y=3 !(x==y) 返回 true            |
+
+### 数组运算符
+
+php有别于其他语言的内容
+
+| x + y   | 集合   | x 和 y 的集合                                                |
+| ------- | ------ | ------------------------------------------------------------ |
+| x == y  | 相等   | 如果 x 和 y 具有相同的键/值对，则返回 true                   |
+| x === y | 恒等   | 如果 x 和 y 具有相同的键/值对，且顺序相同类型相同，则返回 true |
+| x != y  | 不相等 | 如果 x 不等于 y，则返回 true                                 |
+| x <> y  | 不相等 | 如果 x 不等于 y，则返回 true                                 |
+| x !== y | 不恒等 | 如果 x 不等于 y，则返回 true                                 |
+
+### 三元运算符
+
+```PHP
+(expr1) ? (expr2) : (expr3) 
+```
+
+## 判断语句
+
+### if语句
+
+```
+if (条件)
+{
+    条件成立时要执行的代码;
+}
+```
+
+### if...else语句
+
+```
+if (条件)
+{
+条件成立时执行的代码;
+}
+else
+{
+条件不成立时执行的代码;
+}
+```
+
+### if...elseif...else语句
+
+```
+if (条件)
+{
+    if 条件成立时执行的代码;
+}
+elseif (条件)
+{
+    elseif 条件成立时执行的代码;
+}
+else
+{
+    条件不成立时执行的代码;
+}
+```
+
+php支持`elseif`,但是不推荐,
+
+## Switch 语句
+
+用法与其他语言相同
+
+```
+<?php
+switch (n)
+{
+case label1:
+    如果 n=label1，此处代码将执行;
+    break;
+case label2:
+    如果 n=label2，此处代码将执行;
+    break;
+default:
+    如果 n 既不等于 label1 也不等于 label2，此处代码将执行;
+}
+?>
+```
+
+## 数组
+
+### 使用array关键字
+
+```php
+<?php
+    $num=array(1,5,4);
+    echo $num[0];//1
+?>
+```
+
+### 创建数组
+
+在 PHP 中，有三种类型的数组
+
+- **数值数组** - 带有数字 ID 键的数组
+- **关联数组** - 带有指定的键的数组，每个键关联一个值
+- **多维数组** - 包含一个或多个数组的数组
+
+### 数值数组
+
++ 自动分配 ID 键（ID 键总是从 0 开始）
+
+```
+$num=array(1,5,7);
+```
+
+
+
++ 人工分配 ID 键
+
+```
+$num[0]=45;
+$num[1]=4;
+$num[2]=5;
+$num[3]=54;
+```
+
+
+
+### 关联数组
+
+使用你分配给数组的指定的键的数组
+
+```php
+$age=array("Peter"=>"35","Ben"=>"37","Joe"=>"43");
+/*
+    $age['Peter']="35";
+    $age['Ben']="37";
+    $age['Joe']="43";
+*/
+```
+
+
+
+### 多维数组
+
+创建了一个二维的数值数组
+
+```php
+<?php
+// 二维数组:
+$cars = array
+(
+    array("Volvo",100,96),
+    array("BMW",60,59),
+    array("Toyota",110,100)
+);
+?>
+```
+
+
+
+创建了一个自动分配 ID 键的多维数组
+
+```php
+<?php
+$sites = array
+(
+    "google"=>array
+    (
+        "Google 搜索",
+        "http://www.google.com"
+    ),
+    "taobao"=>array
+    (
+        "淘宝",
+        "http://www.taobao.com"
+    )
+);
+?>
+```
+
+
+
+### count() 函数
+
+```php
+<?php
+    $num=array(1,5,7);
+    echo count($num);//3
+?>
+```
+
+### 遍历数值数组
+
+```php
+<?php
+     $num=array(1,5,7);
+     $length=count($num);
+
+    for($i=0;$i<$length;$i++)
+    {
+        echo $num[$i];
+        echo "<br>";
+    }
+?>
+```
+
+### 数组排序
+
+- sort() - 对数组进行升序排列
+- rsort() - 对数组进行降序排列
+- asort() - 根据关联数组的值，对数组进行升序排列
+- ksort() - 根据关联数组的键，对数组进行升序排列
+- arsort() - 根据关联数组的值，对数组进行降序排列
+- krsort() - 根据关联数组的键，对数组进行降序排列
+
+#### sort() 
+
++ 对数组进行升序排列
+
+#### rsort() 
+
++ 对数组进行降序排列
+
+#### asort() 
+
+- 根据关联数组的值，对数组进行升序排列
+
+#### ksort() 
+
+- 根据关联数组的键，对数组进行升序排列
+
+#### arsort() 
+
+- 根据关联数组的值，对数组进行降序排列
+
+#### krsort() 
+
+- 根据关联数组的键，对数组进行降序排列
+
+## 超级变量
+
+- $GLOBALS
+- $_SERVER
+- $_REQUEST
+- $_POST
+- $_GET
+- $_FILES
+- $_ENV
+- $_COOKIE
+- $_SESSION
+
+### $GLOBALS
+
+$GLOBALS 是PHP的一个超级全局变量组，在一个PHP脚本的全部作用域中都可以访问
+
+$GLOBALS 是一个包含了全部变量的全局组合数组。变量的名字就是数组的键
+
+```php
+<?php 
+$te = "hello"; 
+$xt = " php";
+ 
+    function add() 
+    { 
+        $GLOBALS['text'] = $GLOBALS['te'] + $GLOBALS['xt']; 
+    }
+
+    add(); 
+    echo $text; 
+?>
+```
+
+### $_SERVER
+
+```php
+<?php 
+    echo $_SERVER['PHP_SELF'];
+    echo "<br>";
+    echo $_SERVER['SERVER_NAME'];
+    echo "<br>";
+    echo $_SERVER['HTTP_HOST'];
+    echo "<br>";
+    echo $_SERVER['HTTP_REFERER'];
+    echo "<br>";
+    echo $_SERVER['HTTP_USER_AGENT'];
+    echo "<br>";
+    echo $_SERVER['SCRIPT_NAME'];
+?>
+```
+
+| $_SERVER['PHP_SELF']            | 当前执行脚本的文件名，与 document root 有关。例如，在地址为 http://example.com/test.php/foo.bar 的脚本中使用 $_SERVER['PHP_SELF'] 将得到 /test.php/foo.bar。__FILE__ 常量包含当前(例如包含)文件的完整路径和文件名。 从 PHP 4.3.0 版本开始，如果 PHP 以命令行模式运行，这个变量将包含脚本名。之前的版本该变量不可用。 |
+| ------------------------------- | ------------------------------------------------------------ |
+| $_SERVER['GATEWAY_INTERFACE']   | 服务器使用的 CGI 规范的版本；例如，"CGI/1.1"。               |
+| $_SERVER['SERVER_ADDR']         | 当前运行脚本所在的服务器的 IP 地址。                         |
+| $_SERVER['SERVER_NAME']         | 当前运行脚本所在的服务器的主机名。如果脚本运行于虚拟主机中，该名称是由那个虚拟主机所设置的值决定。(如: www.runoob.com) |
+| $_SERVER['SERVER_SOFTWARE']     | 服务器标识字符串，在响应请求时的头信息中给出。 (如：Apache/2.2.24) |
+| $_SERVER['SERVER_PROTOCOL']     | 请求页面时通信协议的名称和版本。例如，"HTTP/1.0"。           |
+| $_SERVER['REQUEST_METHOD']      | 访问页面使用的请求方法；例如，"GET", "HEAD"，"POST"，"PUT"。 |
+| $_SERVER['REQUEST_TIME']        | 请求开始时的时间戳。从 PHP 5.1.0 起可用。 (如：1377687496)   |
+| $_SERVER['QUERY_STRING']        | query string（查询字符串），如果有的话，通过它进行页面访问。 |
+| $_SERVER['HTTP_ACCEPT']         | 当前请求头中 Accept: 项的内容，如果存在的话。                |
+| $_SERVER['HTTP_ACCEPT_CHARSET'] | 当前请求头中 Accept-Charset: 项的内容，如果存在的话。例如："iso-8859-1,*,utf-8"。 |
+| $_SERVER['HTTP_HOST']           | 当前请求头中 Host: 项的内容，如果存在的话。                  |
+| $_SERVER['HTTP_REFERER']        | 引导用户代理到当前页的前一页的地址（如果存在）。由 user agent 设置决定。并不是所有的用户代理都会设置该项，有的还提供了修改 HTTP_REFERER 的功能。简言之，该值并不可信。) |
+| $_SERVER['HTTPS']               | 如果脚本是通过 HTTPS 协议被访问，则被设为一个非空的值。      |
+| $_SERVER['REMOTE_ADDR']         | 浏览当前页面的用户的 IP 地址。                               |
+| $_SERVER['REMOTE_HOST']         | 浏览当前页面的用户的主机名。DNS 反向解析不依赖于用户的 REMOTE_ADDR。 |
+| $_SERVER['REMOTE_PORT']         | 用户机器上连接到 Web 服务器所使用的端口号。                  |
+| $_SERVER['SCRIPT_FILENAME']     | 当前执行脚本的绝对路径。                                     |
+| $_SERVER['SERVER_ADMIN']        | 该值指明了 Apache 服务器配置文件中的 SERVER_ADMIN 参数。如果脚本运行在一个虚拟主机上，则该值是那个虚拟主机的值。(如：someone@runoob.com) |
+| $_SERVER['SERVER_PORT']         | Web 服务器使用的端口。默认值为 "80"。如果使用 SSL 安全连接，则这个值为用户设置的 HTTP 端口。 |
+| $_SERVER['SERVER_SIGNATURE']    | 包含了服务器版本和虚拟主机名的字符串。                       |
+| $_SERVER['PATH_TRANSLATED']     | 当前脚本所在文件系统（非文档根目录）的基本路径。这是在服务器进行虚拟到真实路径的映像后的结果。 |
+| $_SERVER['SCRIPT_NAME']         | 包含当前脚本的路径。这在页面需要指向自己时非常有用。__FILE__ 常量包含当前脚本(例如包含文件)的完整路径和文件名。 |
+| $_SERVER['SCRIPT_URI']          | URI 用来指定要访问的页面。例如 "/index.html"。               |
+
+### $_REQUEST
+
+用于收集HTML表单提交的数据
+
+```php+HTML
+<html>
+<body>
+ 
+    <form method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
+    Name: <input type="text" name="fname">
+    <input type="submit">
+    </form>
+
+    <?php 
+    $name = $_REQUEST['fname']; 
+    echo $name; 
+    ?>
+ 
+</body>
+</html>
+```
+
+## 循环
+
+- **while** - 只要指定的条件成立，则循环执行代码块
+- **do...while** - 首先执行一次代码块，然后在指定的条件成立时重复这个循环
+- **for** - 循环执行代码块指定的次数
+- **foreach** - 根据数组中每个元素来循环代码块
+
+**这里重点只讲`foreach`**
+
+foreach 循环用于遍历数组
+
+类似js中的`todo in todos`
+
+```
+foreach ($array as $value)
+{
+    要执行代码;
+}
+```
+
+
+
+```
+<?php
+	$nums=array(1,2,4);
+	foreach ($nums as $num)
+	{
+    	echo $num . "<br>";
+	}
+?>
+```
+
+## 函数
+
+```php
+<?php
+    function functionName()
+    {
+        // 要执行的代码
+    }
+?>
+```
+
+- 函数的名称应该提示出它的功能
+- 函数名称以字母或下划线开头（不能以数字开头）
+
+### 添加参数
+
+```php
+<?php
+function func($text)
+{
+	echo $text;
+}
+ 
+func("hello php");
+?>
+```
+
+
+
+### 返回值
+
+```php
+<?php
+function add($te,$xt)
+{
+    $total=$te.$xt;
+    return $total;
+}
+ 
+echo add("hello ","php");
+?>
+```
+
+## 魔术变量
+
+PHP 向它运行的任何脚本提供了大量的预定义常量
+
+有八个魔术常量它们的值随着它们在代码中的位置改变而改变
+
+### \_\_LINE\_\_
+
+文件中的当前行号
+
+```php
+<?php
+    echo '这是第 " '  . __LINE__ . ' " 行';
+	//这是第 “ 2 ” 行
+?>
+```
+
+
+
+### \_\_FILE\_\_
+
+文件的完整路径和文件名。如果用在被包含文件中，则返回被包含的文件名
+
+```php
+<?php
+    echo '该文件位于 " '  . __FILE__ . ' " ';
+	//该文件位于 "D:\xxx\xx\xxx\xxx\...\xxx.php"
+?>
+```
+
+
+
+### \_\_DIR\_\_
+
+文件所在的目录。如果用在被包括文件中，则返回被包括的文件所在的目录
+
+```php
+<?php
+    echo '该文件位于 " '  . __DIR__ . ' " ';
+	//该文件位于 “ D:\xxx\xxx\test ”
+?>
+```
+
+
+
+### \_\_FUNCTION\_\_
+
+函数名称
+
+```php
+<?php
+    function test() {
+        echo  '函数名为：' . __FUNCTION__ ;
+    }
+    test();
+    //函数名为：test
+?>
+```
+
+
+
+### \_\_CLASS\_\_
+
+类的名称
+
+```php
+<?php
+    class test {
+        function _print() {
+            echo '类名为：'  . __CLASS__ . "<br>";
+            echo  '函数名为：' . __FUNCTION__ ;
+        }
+    }
+    $t = new test();
+    $t->_print();
+    //类名为：test
+    //函数名为：_print
+?>
+```
+
+
+
+### \_\_METHOD\_\_
+
+类的方法名
+
+```php
+<?php
+    function test() {
+        echo  '函数名为：' . __METHOD__ ;
+    }
+    test();
+    //函数名为：test
+?>
+```
+
+
+
+### \_\_NAMESPACE\_\_
+
+当前命名空间的名称（区分大小写
+
+```php
+<?php
+    namespace MyProject;
+
+    echo '命名空间为："', __NAMESPACE__, '"'; // 输出 "MyProject"
+    //命名空间为："MyProject"
+?>
+```
+
+## 命名空间
+
+1. 用户编写的代码与PHP内部的类/函数/常量或第三方类/函数/常量之间的名字冲突。
+2. 为很长的标识符名称(通常是为了缓解第一类问题而定义的)创建一个别名（或简短）的名称，提高源代码的可读性
+
+### 定义命名空间
+
+类C++的namespace
+
+默认情况下，所有常量、类和函数名都放在全局空间下，就和PHP支持命名空间之前一样。
+
+命名空间通过关键字namespace 来声明。如果一个文件中包含命名空间，它必须在其它所有代码之前声明命名空间
+
++ **命名空间必须是程序脚本的第一条语句**
+
+```php
+<?php  
+    declare(encoding='UTF-8');
+    // 定义代码在 'MyProject' 命名空间中  
+    namespace MyProject;  
+
+    // ... 代码 ...  
+    ?>
+```
+
+不建议在单个文件中定义多个命名空间
+
+如要如此
+
+```php
+<?php
+    declare(encoding='UTF-8');
+    namespace MyProject {
+        $x=45;
+    }
+    namespace AnotherProject {
+		$x=54;
+    }
+?>
+```
+
+### 子命名空间
+
+略
+
+### 命名空间使用
+
+略
+
+### 全局空间
+
+## 面向对象
+
+### **对象的特性**
+
+- 对象的行为：可以对 对象施加那些操作，开灯，关灯就是行为。
+- 对象的形态：当施加那些方法是对象如何响应，颜色，尺寸，外型。
+- 对象的表示：对象的表示就相当于身份证，具体区分在相同的行为与状态下有什么不同
+
+### **类**
+
+- 类使用 **class** 关键字后加上类名定义。
+- 类名后的一对大括号{}内可以定义变量和方法。
+- 类的变量使用 **var** 来声明, 变量也可以初始化值。
+- 类的函数定义类似 PHP 函数的定义，但类的函数只能通过该类及其实例化的对象访问。
+
+```php
+<?php
+    class phpClass {
+      var $var1;
+      var $var2 = "constant string";
+
+      function myfunc ($arg1, $arg2) {
+         //代码
+      }
+      //代码
+    }
+?>  
+```
+
+**$this** 
+
+```php
+<?php
+    class Site {
+      /* 成员变量 */
+      var $url;
+      var $title;
+
+      /* 成员函数 */
+      function setUrl($par){
+         $this->url = $par;
+      }
+
+      function getUrl(){
+         echo $this->url . PHP_EOL;
+      }
+
+      function setTitle($par){
+         $this->title = $par;
+      }
+
+      function getTitle(){
+         echo $this->title . PHP_EOL;
+      }
+    }
+?>
+```
+
+
+
+### **对象**
+
+是类的实例
+
+使用 **new** 运算符来实例化该类的对象
+
+```php
+$runoob = new Site;
+$taobao = new Site;
+$google = new Site;
+```
+
+#### 调用成员方法
+
+不同于c++类似的语言,php使用`->`来调用方法
+
+```php
+// 调用成员函数，设置标题和URL
+$runoob->setTitle( "菜鸟教程" );
+$taobao->setTitle( "淘宝" );
+$google->setTitle( "Google 搜索" );
+
+$runoob->setUrl( 'www.runoob.com' );
+$taobao->setUrl( 'www.taobao.com' );
+$google->setUrl( 'www.google.com' );
+
+// 调用成员函数，获取标题和URL
+$runoob->getTitle();
+$taobao->getTitle();
+$google->getTitle();
+
+$runoob->getUrl();
+$taobao->getUrl();
+$google->getUrl();	
+```
+
+### 构造函数
+
+类C++的构造函数
+
+构造函数是一种特殊的方法。主要用来在创建对象时初始化对象， 即为对象成员变量赋初始值，在创建对象的语句中与 **new** 运算符一起使用
+
+```php
+//语法格式如下
+void __construct ([ mixed $args [, $... ]] )
+```
+
+```php
+function __construct( $par1, $par2 ) {
+   $this->url = $par1;
+   $this->title = $par2;
+}
+```
+
+### 析构函数
+
+类C++的析构函数
+
+```php
+//语法格式如下
+void __destruct ( void )
+```
+
+```php
+<?php
+    class MyDestructableClass {
+       function __construct() {
+           print "构造函数\n";
+           $this->name = "MyDestructableClass";
+       }
+
+       function __destruct() {
+           print "销毁 " . $this->name . "\n";
+       }
+    }
+
+    $obj = new MyDestructableClass();
+?>
+```
+
+### 继承
+
+ #### C++风格的继承
+
+C++使用`:`+`继承方式`
+
+但C++支持多继承
+
+```c++
+class Student:public person{
+    // 代码部分
+}; 
+```
+
+#### php风格的继承
+
+php使用**extends**
+
+但PHP 不支持多继承
+
+```php
+class Student extends Person {
+   // 代码部分
+}
+```
+
+#### 方法重写
+
+##### php风格
+
+```php
+<?php
+	class Person{
+    	var name;
+    	var age;
+    	function __construct($aname,$aage){
+            $this->name=$aname;
+            $this->age=$aage;
+        }
+    	fucntion display(){
+            echo $this->name;
+            echo "<br>";
+            echo $this->age;
+        }
+	}
+	class Student extends Person{
+        function display(){
+            echo "this student is".$this->name;
+            echo "this student is".$this->age." years old"
+        }
+    }
+?>
+```
+
+
+
+##### C++风格
+
+方法重写在C++中表现为**多态性**
+
+与C++的静态多态性相同
+
+```C++
+#include<iostream>
+#include<string>
+#define PI 3.14
+using namespace std;
+class Circle{
+    public:
+    	Circle(float r);
+    	virtual void display();////虚函数
+    	~Circle();	
+    protected:
+    	string Shape;
+    	float R;
+};
+Circle::Circle(float r){
+    this->R=r;
+    cout<<"construct finished"<<endl;
+}
+void Circle::display(){
+    cout<<PI*r*r<<endl;
+}
+Circle::~Circle(){
+    cout<<"destruct finished"<<endl;
+}
+class Cylinder:public Circle{
+  private:
+    	int h;
+  public:
+  	Cylinder(float h,float r);
+    virtual void display();////对虚函数进行再定义
+    ~Cylinder();
+};
+Cylinder::Cylinder(float h,float r):Circle(r){
+    this->h=h;
+	cout<<"finished construct"<<endl;
+}
+void Cylinder::display(){
+    cout<<PI*r*r*h<<endl;
+}
+
+Cylinder::~Cylinder(){
+    cout<<"finished destruct"<<endl;
+}
+int main(void){
+    Circle circle(1);
+    Cylinder cylinder(2,1);
+    circle.display();
+    cylinder.display();
+    return 0;
+}
+```
+
+###### 拓展
+
+**静态多态性是通过函数的重载实现的(运算符重载实质上也是函数重载)。**
+
+**动态多态性是在程序运行过程中才动态地确定操作所针对的对象。它又称运行时的多态性**
+
+### 访问控制
+
+同C++,PHP 对属性或方法的访问控制，是通过在前面添加关键字 public（公有），protected（受保护）或 private（私有）来实现的
+
+- **public（公有）：**公有的类成员可以在任何地方被访问。
+- **protected（受保护）：**受保护的类成员则可以被其自身以及其子类和父类访问。
+- **private（私有）：**私有的类成员则只能被其定义所在的类访问。
+
+#### 属性的访问控制
+
+如果用 var 定义，则属性被视为公有
+
+```php
+<?php
+class MyClass
+{
+    public $public = 'Public';
+    protected $protected = 'Protected';
+    private $private = 'Private';
+    
+    function printHello()
+    {
+        echo $this->public;
+        echo $this->protected;
+        echo $this->private;
+    }
+}
+
+$obj = new MyClass();
+echo $obj->public; // 这行能被正常执行
+echo $obj->protected; // 这行会产生一个致命错误
+echo $obj->private; // 这行也会产生一个致命错误
+$obj->printHello(); // 输出 Public、Protected 和 Private
+
+
+class MyClass2 extends MyClass
+{
+    // 可以对 public 和 protected 进行重定义，但 private 而不能
+    protected $protected = 'Protected2';
+
+    function printHello()
+    {
+        echo $this->public;
+        echo $this->protected;
+        echo $this->private;
+    }
+}
+
+$obj2 = new MyClass2();
+echo $obj2->public; // 这行能被正常执行
+echo $obj2->private; // 未定义 private
+echo $obj2->protected; // 这行会产生一个致命错误
+$obj2->printHello(); // 输出 Public、Protected2 和 Undefined
+
+?>
+```
+
+
+
+#### 方法的访问控制
+
+如果没有设置这些关键字，则该方法默认为公有
+
+```php
+<?php
+
+class MyClass
+{
+    // 声明一个公有的构造函数
+    public function __construct() { }
+
+    // 声明一个公有的方法
+    public function MyPublic() { }
+
+    // 声明一个受保护的方法
+    protected function MyProtected() { }
+
+    // 声明一个私有的方法
+    private function MyPrivate() { }
+
+    // 此方法为公有
+    function Foo()
+    {
+        $this->MyPublic();
+        $this->MyProtected();
+        $this->MyPrivate();
+    }
+}
+
+$myclass = new MyClass;
+$myclass->MyPublic(); // 这行能被正常执行
+$myclass->MyProtected(); // 这行会产生一个致命错误
+$myclass->MyPrivate(); // 这行会产生一个致命错误
+$myclass->Foo(); // 公有，受保护，私有都可以执行
+
+
+class MyClass2 extends MyClass
+{
+    // 此方法为公有
+    function Foo2()
+    {
+        $this->MyPublic();
+        $this->MyProtected();
+        $this->MyPrivate(); // 这行会产生一个致命错误
+    }
+}
+
+$myclass2 = new MyClass2;
+$myclass2->MyPublic(); // 这行能被正常执行
+$myclass2->Foo2(); // 公有的和受保护的都可执行，但私有的不行
+
+?>
+```
+
+### 接口
+
+#### 类java的接口
+
+使用接口（interface），可以指定某个类必须实现哪些方法，但不需要定义这些方法的具体内容
+
+接口是通过 **interface** 关键字来**定义**的，就像定义一个标准的类一样，但其中定义所有的方法都是空的。
+
+接口中定义的所有方法都必须是公有，这是接口的特性。
+
+要**实现**一个接口，使用 **implements** 操作符。类中必须实现接口中定义的所有方法，否则会报一个致命错误。类可以实现多个接口，用逗号来分隔多个接口的名称。
+
+```php
+<?php
+
+    interface iTemplate
+    {
+        public function setVariable($name, $var);
+        public function getHtml($template);
+    }
+
+
+class Template implements iTemplate
+{
+    private $vars = array();
+  
+    public function setVariable($name, $var)
+    {
+        $this->vars[$name] = $var;
+    }
+  
+    public function getHtml($template)
+    {
+        foreach($this->vars as $name => $value) {
+            $template = str_replace('{' . $name . '}', $value, $template);
+        }
+ 
+        return $template;
+    }
+}
+```
+
+### 常量
+
+可以把在类中始终保持不变的值定义为常量。在定义和使用常量的时候不需要使用 $ 符号
+
+使用const关键词
+
+常量的值必须是一个定值，不能是变量，类属性，数学运算的结果或函数调用。
+
+### 抽象类
+
+使用**`abstract`**关键字
+
+任何一个类，如果它里面至少有一个方法是被声明为抽象的，那么这个类就必须被声明为抽象的
+
+定义为抽象的类不能被实例化。
+
+被定义为抽象的方法只是声明了其调用方式（参数），不能定义其具体的功能实现
+
+继承一个抽象类的时候，子类必须定义父类中的所有抽象方法；另外，这些方法的访问控制必须和父类中一样（或者更为宽松）。例如某个抽象方法被声明为受保护的，那么子类中实现的方法就应该声明为受保护的或者公有的，而不能定义为私有的
+
+```PHP
+<?php
+    abstract class AbstractClass
+    {
+     // 强制要求子类定义这些方法
+        abstract protected function getValue();
+        abstract protected function prefixValue($prefix);
+
+        // 普通方法（非抽象方法）
+        public function printOut() {
+            print $this->getValue() . PHP_EOL;
+        }
+    }
+
+    class ConcreteClass1 extends AbstractClass
+    {
+        protected function getValue() {
+            return "ConcreteClass1";
+        }
+
+        public function prefixValue($prefix) {
+            return "{$prefix}ConcreteClass1";
+        }
+    }
+
+    class ConcreteClass2 extends AbstractClass
+    {
+        public function getValue() {
+            return "ConcreteClass2";
+        }
+
+        public function prefixValue($prefix) {
+            return "{$prefix}ConcreteClass2";
+        }
+    }
+
+    $class1 = new ConcreteClass1;
+    $class1->printOut();
+    echo $class1->prefixValue('FOO_') . PHP_EOL;
+
+    $class2 = new ConcreteClass2;
+    $class2->printOut();
+    echo $class2->prefixValue('FOO_') . PHP_EOL;
+  	/*ConcreteClass1
+    FOO_ConcreteClass1
+    ConcreteClass2
+    FOO_ConcreteClass2*/  
+?>
+```
+
+### Static 关键字
+
+static 是C++中很常用的修饰符，它被用来控制变量的存储方式和可见性。但在PHP中用 static 关键字来定义静态方法和属性， 也可用于定义静态变量以及后期静态绑定
+
+声明类属性或方法为 static(静态)，就可以不实例化类而直接访问
+
+由于静态方法不需要通过对象即可调用，所以伪变量 $this 在静态方法中不可用。
+
+静态属性不可以由对象通过 -> 操作符来访问
+
+静态成员函数内不能用this调用非成员函数，但可以用self调用静态成员函数/变量/常量
+
+```php
+<?php
+    class Foo
+    {
+        public static $my_static = 'foo';
+
+        public function staticValue() {
+            return self::$my_static;
+        }
+        public static function output() {
+            return self::$my_static;
+        }
+    }
+
+    class Bar extends Foo
+    {
+        public function fooStatic() {
+            return parent::$my_static;
+        }
+    }
+
+    print Foo::$my_static . "\n";
+    print Foo::output() . "\n";
+    $foo = new Foo();
+    print $foo->staticValue() . "\n";
+    print $foo->my_static . "\n";      // Undefined "Property" my_static 
+    print $foo::$my_static . "\n";
+?>
+```
+
+```php
+<?php
+function Test()
+{
+    $a = 0;
+    echo $a;
+    $a++;
+}
+?>
+本函数没什么用处，因为每次调用时都会将 $a 的值设为 0 并输出 0。将变量加一的 $a++ 没有作用，因为一旦退出本函数则变量 $a 就不存在了。要写一个不会丢失本次计数值的计数函数，要将变量 $a 定义为静态的：
+<?php
+function test()
+{
+    static $a = 0;
+    echo $a;
+    $a++;
+}
+?>
+现在，变量 $a 仅在第一次调用 test() 函数时被初始化，之后每次调用 test() 函数都会输出 $a 的值并加一。
+静态变量也提供了一种处理递归函数的方法。递归函数是一种调用自己的函数。写递归函数时要小心，因为可能会无穷递归下去。必须确保有充分的方法来中止递归。以下这个简单的函数递归计数到 10，使用静态变量 $count 来判断何时停止：
+<?php
+    function test()
+    {
+        static $count = 0;
+
+        $count++;
+        echo $count;
+        if ($count < 10) {
+            test();
+        }
+        $count--;
+    }
+?>
+```
+
+
+
+### Final 关键字
+
+如果父类中的**方法**被声明为 final，则子类无法覆盖该方法。如果一个**类**被声明为 final，则不能被继承
+
+### 调用父类构造方法
+
+PHP 不会在子类的构造方法中自动的调用父类的构造方法。要执行父类的构造方法，需要在子类的构造方法中调用 **parent::__construct()**
+
+```php
+<?php
+class BaseClass {
+   function __construct() {
+       print "BaseClass 类中构造方法" . PHP_EOL;
+   }
+}
+class SubClass extends BaseClass {
+   function __construct() {
+       parent::__construct();  // 子类构造方法不能自动调用父类的构造方法
+       print "SubClass 类中构造方法" . PHP_EOL;
+   }
+}
+class OtherSubClass extends BaseClass {
+    // 继承 BaseClass 的构造方法
+}
+
+// 调用 BaseClass 构造方法
+$obj = new BaseClass();
+
+// 调用 BaseClass、SubClass 构造方法
+$obj = new SubClass();
+
+// 调用 BaseClass 构造方法
+$obj = new OtherSubClass();
+    /*
+    BaseClass 类中构造方法----->BaseClass
+    BaseClass 类中构造方法----->SubClass
+    SubClass 类中构造方法------>SubClass
+    BaseClass 类中构造方法----->OtherSubClass
+    */
+?>
+```
+
+### parent与this与static
+
+parent引用父类/基类被隐盖的方法（或变量）
+
+self则引用自身方法（或变量）
+
+static常规用途是修饰函数或变量使其成为类函数和类变量，也可以修饰函数内变量延长其生命周期至整个应用程序的生命周期
+
+self与static的区别是：对于静态成员函数，self指向代码当前类，static指向调用类；对于非静态成员函数，self抑制多态，指向当前类的成员函数，static等同于this，动态指向调用类的函数
+
+parent、self、static三个关键字联合在一起看挺有意思，分别指向父类、当前类、子类，有点“过去、现在、未来”的味道
+
+### this与self
+
+1. this不能用在静态成员函数中，self可以；
+2. 对静态成员函数/变量的访问，建议 用self，不要用$this::或$this->的形式；
+3. 对非静态成员变量的访问，不能用self，只能用this;
+4. this要在对象已经实例化的情况下使用，self没有此限制；
+5. 在非静态成员函数内使用，self抑制多态行为，引用当前类的函数；而this引用调用类的重写(override)函数（如果有的话）。

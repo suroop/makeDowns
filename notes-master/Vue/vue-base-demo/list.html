@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+	<title>新闻列表</title>
+	<link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/index.css" />
+</head>
+
+<body>
+	<div id="app">
+		<header id="header">
+			<div class="header container">
+				<div class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li>
+							<a href="list.html" class="active">列表</a>
+						</li>
+					</ul>
+					<div class="select-ip visible-lg">
+						<input type="text" placeholder="搜索" />
+						<span></span>
+					</div>
+				</div>
+			</div>
+		</header>
+		<div class="section">
+			<div class="container conter-ming">
+				<div class="col-xs-12 col-sm-12 col-md-12 right-infor">
+					<div class="infor-conter">
+						<div class="crumbs">
+							<a href="list.html">列表</a>
+						</div>
+						<div class="news-list">
+							<ul>
+								<li v-for="item in cis">
+									<div class="new-time active">
+										<span class="time-day">{{ item.author }}</span>
+									</div>
+									<div class="new-infor">
+										<div class="new-title">
+											<a v-bind:href="detailUrl(item)">{{ item.rhythmic }}</a>
+										</div>
+										<div class="new-min">
+											<template v-if="item.paragraphs.length !== 0">
+												{{ item.paragraphs }}
+											</template>
+										</div>
+									</div>
+								</li>
+
+							</ul>
+						</div>
+						<div class="fenye">
+							<nav aria-label="Page navigation float-left">
+								<ul class="pagination float-left">
+									<li>
+										<a href="JavaScript:;" aria-label="Previous">
+											<span aria-hidden="true" @click="prevPage()">上一页</span>
+										</a>
+									</li>
+									<li>
+										<a href="JavaScript:;" aria-label="Next">
+											<span aria-hidden="true" @click="nextPage()">下一页</span>
+										</a>
+									</li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div id="footer-container">
+			<footer-container></footer-container>
+		</div>
+	</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.6/dist/vue.js"></script>
+<script src="js/data.js"></script>
+
+<script>
+	var app = new Vue({
+		// app 实例
+		el: '#app',
+		// 数据对象
+		data: {
+			title: '干活集中营',
+			ciData: [],
+			cis: [],
+			params: [],
+		},
+		// el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子
+		mounted: function () {
+			this.getCiData();
+			this.getCis();
+			this.getRequestData();
+		},
+		// 在实例创建完成后被立即调用
+		created: function () {},
+		// 由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
+		updated: function () {},
+		// Vue 实例销毁后调用。
+		destroyed: function () {},
+		// 计算属性
+		computed: {},
+		// 监听属性
+		watch: {},
+		// 方法
+		methods: {
+			getCiData: function () {
+				this.ciData = data;
+			},
+			getCis: function () {
+				this.cis = this.ciData.slice(0, 10);
+			},
+			detailUrl: function (item) {
+				return 'detail.html?' + 'author=' + item.author + '&rhythmic=' + item.rhythmic + '&paragraphs=' + item.paragraphs
+			},
+			getRequestData: function () {
+				var url = window.location.search;
+				var theRequest = new Object();
+				if (url.indexOf("?") != -1) {
+					var str = url.substr(1);
+					strs = str.split("&");
+					for (var i = 0; i < strs.length; i++) {
+						theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+
+					}
+				}
+				this.params = theRequest;
+			},
+		},
+	})
+	// 定义一个名为 footer-container 组件
+	Vue.component('footer-container', {
+		data: function () {
+			return {
+				guanguans: 'https://github.com/guanguans',
+			}
+		},
+		template: '<footer><div class="container"><div class="foot_Keep_record">版权所有 © 2019 <a v-bind:href="guanguans" target="_blank">guanguans</a></div></div></footer>'
+	})
+	new Vue({
+		el: '#footer-container'
+	})
+</script>
+
+</html>

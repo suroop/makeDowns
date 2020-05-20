@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>vue-demo</title>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <!-- 生产环境版本，优化了尺寸和速度 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.6/dist/vue.min.js"></script>
+    <!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.6.6/dist/vue.js"></script> -->
+    <!-- <script src="https://unpkg.com/vue-router@3.0.2/dist/vue-router.js"></script> -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <div id="app" class="container">
+        <h1>{{ title }}</h1>
+        <ul class="list-unstyled">
+            <li class="media" v-for="item in articles">
+                <a v-bind:href="item.url" target="_blank">
+                    <div class="media-body">
+                        <h5 class="mt-0 mb-1">{{ item.desc }}</h5>
+                    </div>
+                </a>
+            </li>
+        </ul>
+    </div>
+</body>
+<script>
+    var app = new Vue({
+        // app 实例
+        el: '#app',
+        // 数据对象
+        data: {
+            title: '干活集中营',
+            apiURL: 'http://gank.io/api/random/data/all/20',
+            articles: [],
+        },
+        // el 被新创建的 vm.$el 替换，并挂载到实例上去之后调用该钩子
+        mounted: function () {
+            this.getVueCommits();
+        },
+        // 在实例创建完成后被立即调用
+        created: function () {},
+        // 由于数据更改导致的虚拟 DOM 重新渲染和打补丁，在这之后会调用该钩子。
+        updated: function () {},
+        // Vue 实例销毁后调用。
+        destroyed: function () {},
+        // 计算属性
+        computed: {},
+        // 监听属性
+        watch: {},
+        // 方法
+        methods: {
+            getVueCommits: function () {
+                axios.get(this.apiURL).then(response => {
+                    if (response.data.error === true) {
+                        alert('获取数据失败');
+                    }
+                    this.articles = response.data.results;
+                }).catch(error => {
+                    console.log(error);
+                    this.errored = true
+                }).finally(() => this.loading = true)
+            },
+        },
+    })
+</script>
+
+</html>
